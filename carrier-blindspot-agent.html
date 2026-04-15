@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Colleague Hub — Carrier Blindspot Agent</title>
+<title>Carrier Blindspot Agent</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -21,37 +21,37 @@
 }
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 
-.hdr{background:var(--white);border-bottom:1px solid var(--border);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
-.hdr-left{display:flex;align-items:center;gap:14px}
-.logo{width:38px;height:38px;background:var(--orange);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff}
-.hdr-title{font-size:16px;font-weight:700}
-.hdr-sub{font-size:12px;color:var(--muted);margin-top:1px}
-.hdr-right{display:flex;align-items:center;gap:16px}
-.hdr-status{display:flex;align-items:center;gap:7px;padding:6px 14px;background:var(--orange-light);border-radius:20px;font-size:12px;font-weight:600;color:var(--orange)}
-.hdr-dot{width:7px;height:7px;background:var(--orange);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-
 .main{max-width:1200px;margin:0 auto;padding:16px 32px}
 
 /* UPLOAD STATE */
-#uploadState{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:20px}
+#uploadState{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:72vh;gap:16px}
 .upload-zone{width:100%;max-width:560px;border:2px dashed var(--border);border-radius:var(--r);padding:60px 40px;text-align:center;cursor:pointer;transition:all .2s;background:var(--white)}
 .upload-zone:hover{border-color:var(--orange);background:var(--orange-light)}
+.upload-zone.selected{border-color:var(--green);border-style:solid;background:var(--green-light);cursor:default}
 .upload-icon{font-size:48px;margin-bottom:16px;opacity:.6}
 .upload-title{font-size:16px;font-weight:700;margin-bottom:6px}
 .upload-sub{font-size:13px;color:var(--muted);line-height:1.5}
 .upload-btn{display:inline-flex;align-items:center;gap:6px;margin-top:16px;padding:10px 24px;background:var(--orange);color:#fff;border:none;border-radius:var(--rs);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
 .upload-btn:hover{background:var(--orange-dark);transform:translateY(-1px)}
+.demo-note{font-size:12px;color:var(--muted);text-align:center}
+.demo-link{color:var(--orange);cursor:pointer;font-weight:600;text-decoration:underline}
 
 /* LOADING STATE */
-#loadingState{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:20px}
+#loadingState{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:72vh;gap:16px}
 .loader-ring{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loader-text{font-size:14px;color:var(--text2)}
-.loader-step{font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.loader-text{font-size:14px;color:var(--text2);font-weight:600}
+.loader-step{font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;min-height:18px}
+.progress-wrap{width:280px;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.progress-bar{height:100%;background:var(--orange);border-radius:2px;width:0%;transition:width .4s ease}
 
-/* DASHBOARD STATE */
+/* DASHBOARD */
 #dashboardState{display:none}
+.dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding:12px 16px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow)}
+.dash-file{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:6px}
+.dash-file strong{color:var(--text);font-family:'JetBrains Mono',monospace}
+.reset-btn{padding:7px 16px;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--rs);font-family:inherit;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .15s}
+.reset-btn:hover{border-color:var(--orange);color:var(--orange)}
 
 /* STATS ROW */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
@@ -72,9 +72,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .finding.sev-high::before{background:var(--red)}
 .finding.sev-medium::before{background:var(--orange)}
 .finding.sev-low::before{background:var(--blue)}
-.finding-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
+.finding-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;gap:12px}
 .finding-title{font-size:14px;font-weight:700}
-.finding-badge{padding:4px 12px;border-radius:14px;font-size:11px;font-weight:600}
+.finding-badge{padding:4px 12px;border-radius:14px;font-size:11px;font-weight:600;white-space:nowrap;flex-shrink:0}
 .finding-badge.high{background:var(--red-light);color:var(--red)}
 .finding-badge.medium{background:var(--orange-light);color:var(--orange-dark)}
 .finding-badge.low{background:var(--blue-light);color:var(--blue)}
@@ -87,9 +87,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .table-wrap{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th{text-align:left;padding:12px 16px;background:var(--bg);font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border)}
-td{padding:12px 16px;border-bottom:1px solid var(--border-light)}
+td{padding:12px 16px;border-bottom:1px solid var(--border-light);vertical-align:middle}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:rgba(0,0,0,.01)}
+tr:hover td{background:rgba(0,0,0,.015)}
 .carrier-name{font-weight:600}
 .grade{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;font-size:12px;font-weight:700}
 .grade.a{background:var(--green-light);color:var(--green)}
@@ -100,9 +100,9 @@ tr:hover td{background:rgba(0,0,0,.01)}
 .flag.risk{background:var(--red-light);color:var(--red)}
 .flag.ok{background:var(--green-light);color:var(--green)}
 .flag.watch{background:var(--yellow-light);color:var(--yellow)}
-.score-bar{width:60px;height:6px;background:var(--bg);border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:8px}
-.score-fill{height:100%;border-radius:3px}
-.csv-tag{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.score-wrap{display:flex;align-items:center;gap:8px}
+.score-bar{width:48px;height:5px;background:var(--bg);border-radius:3px;overflow:hidden;display:inline-block;flex-shrink:0}
+.score-fill{height:100%;border-radius:3px;display:block}
 
 /* RESPONSIVE */
 @media(max-width:768px){
@@ -118,35 +118,43 @@ tr:hover td{background:rgba(0,0,0,.01)}
   .data-chip{font-size:10px;padding:4px 8px}
   .finding-action{font-size:11px}
   .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-  table{min-width:640px}
+  table{min-width:680px}
   th,td{padding:10px 12px;font-size:12px}
+  .dash-header{flex-direction:column;align-items:flex-start;gap:10px}
+  .upload-zone{padding:40px 24px}
 }
 </style>
 </head>
 <body>
 
-
 <div class="main">
 
   <!-- UPLOAD STATE -->
   <div id="uploadState">
-    <div class="upload-zone" onclick="startAnalysis()">
+    <div class="upload-zone" id="dropZone" onclick="selectFile()">
       <div class="upload-icon">📊</div>
       <div class="upload-title">Upload je shipment data</div>
       <div class="upload-sub">Sleep een CSV-bestand hierheen of klik om te selecteren.<br>De AI analyseert je lanes, carriers en volumes automatisch.</div>
-      <button class="upload-btn" onclick="event.stopPropagation();startAnalysis()">CSV selecteren</button>
+      <button class="upload-btn" onclick="event.stopPropagation();selectFile()">CSV selecteren</button>
     </div>
+    <div class="demo-note">Geen CSV bij de hand? <span class="demo-link" onclick="loadDemo()">Gebruik voorbeelddata</span></div>
   </div>
 
   <!-- LOADING STATE -->
   <div id="loadingState">
     <div class="loader-ring"></div>
     <div class="loader-text">Shipment data wordt geanalyseerd...</div>
-    <div class="loader-step" id="loaderStep">38 rijen inlezen...</div>
+    <div class="loader-step" id="loaderStep"></div>
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
   </div>
 
   <!-- DASHBOARD STATE -->
   <div id="dashboardState">
+
+    <div class="dash-header">
+      <div class="dash-file">📄 <strong id="dashFilename">shipment_Q1_2026.csv</strong> &nbsp;·&nbsp; geanalyseerd op 15 apr 2026 &nbsp;·&nbsp; 2.486 rijen verwerkt</div>
+      <button class="reset-btn" onclick="resetDemo()">↩ Nieuwe analyse</button>
+    </div>
 
     <div class="stats-row">
       <div class="stat-card">
@@ -167,7 +175,7 @@ tr:hover td{background:rgba(0,0,0,.01)}
       <div class="stat-card">
         <div class="stat-label">Blindspots gevonden</div>
         <div class="stat-num" style="color:var(--red)">5</div>
-        <div class="stat-sub">2 hoog · 2 medium · 1 laag</div>
+        <div class="stat-sub">2 hoog · 2 medium · 1 kans</div>
       </div>
     </div>
 
@@ -195,7 +203,7 @@ tr:hover td{background:rgba(0,0,0,.01)}
             <div class="finding-title">Mulder Express presteert structureel onder de maat</div>
             <span class="finding-badge high">Hoog risico</span>
           </div>
-          <div class="finding-desc">Mulder Express scoort op alle 4 lanes ver onder het gemiddelde: 64-71% on-time (benchmark: 90%+) en 3,5-4,2% schadepercentage (benchmark: &lt;1%). Dit patroon is consistent over het hele kwartaal.</div>
+          <div class="finding-desc">Mulder Express scoort op alle 4 lanes ver onder het gemiddelde: 64–71% on-time (benchmark: 90%+) en 3,5–4,2% schadepercentage (benchmark: &lt;1%). Dit patroon is consistent over het hele kwartaal.</div>
           <div class="finding-data">
             <span class="data-chip">Venlo→Düss: 64% on-time · 4,2% schade</span>
             <span class="data-chip">A'dam→Hamburg: 67% · 3,8%</span>
@@ -224,7 +232,7 @@ tr:hover td{background:rgba(0,0,0,.01)}
             <div class="finding-title">Hendriks Forwarding consistent duurder zonder meerwaarde</div>
             <span class="finding-badge medium">Medium risico</span>
           </div>
-          <div class="finding-desc">Hendriks Forwarding is actief op 6 lanes en scoort overal 10-20% boven de goedkoopste concurrent, met lagere on-time percentages (80-88%) en hogere schadepercentages (1,0-2,1%). Geen enkele lane waar ze de beste optie zijn.</div>
+          <div class="finding-desc">Hendriks Forwarding is actief op 6 lanes en scoort overal 10–20% boven de goedkoopste concurrent, met lagere on-time percentages (80–88%) en hogere schadepercentages (1,0–2,1%). Geen enkele lane waar ze de beste optie zijn.</div>
           <div class="finding-data">
             <span class="data-chip">6 lanes actief</span>
             <span class="data-chip">Gem. 15% duurder</span>
@@ -239,14 +247,14 @@ tr:hover td{background:rgba(0,0,0,.01)}
             <div class="finding-title">Visser Logistics onderbenut — beste prijs-prestatie</div>
             <span class="finding-badge low">Kans</span>
           </div>
-          <div class="finding-desc">Visser Logistics scoort op 6 lanes de laagste prijs én de hoogste betrouwbaarheid (95-97% on-time, 0,2-0,3% schade), maar krijgt overal het minste volume. Hier ligt een directe optimalisatiekans.</div>
+          <div class="finding-desc">Visser Logistics scoort op 6 lanes de laagste prijs én de hoogste betrouwbaarheid (95–97% on-time, 0,2–0,3% schade), maar krijgt overal het minste volume. Hier ligt een directe optimalisatiekans.</div>
           <div class="finding-data">
             <span class="data-chip">6 lanes · overal goedkoopst</span>
             <span class="data-chip">Gem. 96% on-time</span>
             <span class="data-chip">Gem. 0,2% schade</span>
             <span class="data-chip">Slechts 3,5% van totaal volume</span>
           </div>
-          <div class="finding-action">💡 Capaciteitsgesprek met Visser Logistics starten. Bij opschaling naar 15-20% van volume potentieel €47k/jaar besparing.</div>
+          <div class="finding-action">💡 Capaciteitsgesprek met Visser Logistics starten. Bij opschaling naar 15–20% van volume potentieel €47k/jaar besparing.</div>
         </div>
 
       </div>
@@ -273,134 +281,98 @@ tr:hover td{background:rgba(0,0,0,.01)}
           <tbody>
             <tr>
               <td class="carrier-name">Visser Logistics</td>
-              <td>6</td>
-              <td>20.500 kg</td>
-              <td>€2,64</td>
-              <td>96%</td>
+              <td>6</td><td>20.500 kg</td><td>€2,64</td>
+              <td><div class="score-wrap"><span class="score-bar"><span class="score-fill" style="width:96%;background:var(--green)"></span></span>96%</div></td>
               <td>0,2%</td>
-              <td><span class="grade a">A</span></td>
-              <td><span class="grade a">A</span></td>
+              <td><span class="grade a">A</span></td><td><span class="grade a">A</span></td>
               <td><span class="flag ok">✓ Top carrier</span></td>
             </tr>
             <tr>
               <td class="carrier-name">Dekker Transport</td>
-              <td>3</td>
-              <td>93.000 kg</td>
-              <td>€2,55</td>
-              <td>93%</td>
+              <td>3</td><td>93.000 kg</td><td>€2,55</td>
+              <td><div class="score-wrap"><span class="score-bar"><span class="score-fill" style="width:93%;background:var(--green)"></span></span>93%</div></td>
               <td>0,5%</td>
-              <td><span class="grade a">A</span></td>
-              <td><span class="grade a">A</span></td>
+              <td><span class="grade a">A</span></td><td><span class="grade a">A</span></td>
               <td><span class="flag ok">✓ Betrouwbaar</span></td>
             </tr>
             <tr>
               <td class="carrier-name">Bakker Distributie</td>
-              <td>2</td>
-              <td>56.000 kg</td>
-              <td>€1,99</td>
-              <td>93%</td>
+              <td>2</td><td>56.000 kg</td><td>€1,99</td>
+              <td><div class="score-wrap"><span class="score-bar"><span class="score-fill" style="width:93%;background:var(--green)"></span></span>93%</div></td>
               <td>0,5%</td>
-              <td><span class="grade a">A</span></td>
-              <td><span class="grade a">A</span></td>
+              <td><span class="grade a">A</span></td><td><span class="grade a">A</span></td>
               <td><span class="flag ok">✓ Betrouwbaar</span></td>
             </tr>
             <tr>
               <td class="carrier-name">Brouwer Shipping</td>
-              <td>3</td>
-              <td>84.000 kg</td>
-              <td>€3,30</td>
-              <td>92%</td>
+              <td>3</td><td>84.000 kg</td><td>€3,30</td>
+              <td><div class="score-wrap"><span class="score-bar"><span class="score-fill" style="width:92%;background:var(--blue)"></span></span>92%</div></td>
               <td>0,6%</td>
-              <td><span class="grade b">B</span></td>
-              <td><span class="grade a">A</span></td>
+              <td><span class="grade b">B</span></td><td><span class="grade a">A</span></td>
               <td><span class="flag ok">✓ Betrouwbaar</span></td>
             </tr>
             <tr>
               <td class="carrier-name">De Groot Transport</td>
-              <td>3</td>
-              <td>94.000 kg</td>
-              <td>€3,43</td>
-              <td>92%</td>
+              <td>3</td><td>94.000 kg</td><td>€3,43</td>
+              <td><div class="score-wrap"><span class="score-bar"><span class="score-fill" style="width:92%;background:var(--blue)"></span></span>92%</div></td>
               <td>0,6%</td>
-              <td><span class="grade b">B</span></td>
-              <td><span class="grade a">A</span></td>
+              <td><span class="grade b">B</span></td><td><span class="grade a">A</span></td>
               <td><span class="flag ok">✓ Betrouwbaar</span></td>
             </tr>
             <tr>
-              <td class="carrier-name">Peters & Co</td>
-              <td>1</td>
-              <td>21.000 kg</td>
-              <td>€3,70</td>
-              <td>93%</td>
+              <td class="carrier-name">Peters &amp; Co</td>
+              <td>1</td><td>21.000 kg</td><td>€3,70</td>
+              <td><div class="score-wrap"><span class="score-bar"><span class="score-fill" style="width:93%;background:var(--green)"></span></span>93%</div></td>
               <td>0,4%</td>
-              <td><span class="grade b">B</span></td>
-              <td><span class="grade a">A</span></td>
+              <td><span class="grade b">B</span></td><td><span class="grade a">A</span></td>
               <td><span class="flag ok">✓ Betrouwbaar</span></td>
             </tr>
             <tr>
               <td class="carrier-name">Kuiper Freight</td>
-              <td>2</td>
-              <td>27.000 kg</td>
-              <td>€3,75</td>
-              <td>94%</td>
+              <td>2</td><td>27.000 kg</td><td>€3,75</td>
+              <td><div class="score-wrap"><span class="score-bar"><span class="score-fill" style="width:94%;background:var(--green)"></span></span>94%</div></td>
               <td>0,5%</td>
-              <td><span class="grade b">B</span></td>
-              <td><span class="grade a">A</span></td>
+              <td><span class="grade b">B</span></td><td><span class="grade a">A</span></td>
               <td><span class="flag ok">✓ Betrouwbaar</span></td>
             </tr>
             <tr>
               <td class="carrier-name">Vermeer Logistics</td>
-              <td>2</td>
-              <td>111.000 kg</td>
-              <td>€2,03</td>
-              <td>94%</td>
+              <td>2</td><td>111.000 kg</td><td>€2,03</td>
+              <td><div class="score-wrap"><span class="score-bar"><span class="score-fill" style="width:94%;background:var(--green)"></span></span>94%</div></td>
               <td>0,5%</td>
-              <td><span class="grade a">A</span></td>
-              <td><span class="grade a">A</span></td>
+              <td><span class="grade a">A</span></td><td><span class="grade a">A</span></td>
               <td><span class="flag watch">⚠ Volume-risico</span></td>
             </tr>
             <tr>
-              <td class="carrier-name">Janssen & Zoon</td>
-              <td>2</td>
-              <td>38.000 kg</td>
-              <td>€2,93</td>
-              <td>89%</td>
+              <td class="carrier-name">Janssen &amp; Zoon</td>
+              <td>2</td><td>38.000 kg</td><td>€2,93</td>
+              <td><div class="score-wrap"><span class="score-bar"><span class="score-fill" style="width:89%;background:var(--yellow)"></span></span>89%</div></td>
               <td>0,8%</td>
-              <td><span class="grade b">B</span></td>
-              <td><span class="grade b">B</span></td>
+              <td><span class="grade b">B</span></td><td><span class="grade b">B</span></td>
               <td><span class="flag watch">⚠ Monitor</span></td>
             </tr>
             <tr>
               <td class="carrier-name">Wolters Cargo</td>
-              <td>3</td>
-              <td>60.000 kg</td>
-              <td>€4,00</td>
-              <td>88%</td>
+              <td>3</td><td>60.000 kg</td><td>€4,00</td>
+              <td><div class="score-wrap"><span class="score-bar"><span class="score-fill" style="width:88%;background:var(--yellow)"></span></span>88%</div></td>
               <td>1,1%</td>
-              <td><span class="grade d">D</span></td>
-              <td><span class="grade c">C</span></td>
+              <td><span class="grade d">D</span></td><td><span class="grade c">C</span></td>
               <td><span class="flag risk">✕ Te duur</span></td>
             </tr>
             <tr>
               <td class="carrier-name">Hendriks Forwarding</td>
-              <td>6</td>
-              <td>45.500 kg</td>
-              <td>€3,37</td>
-              <td>85%</td>
+              <td>6</td><td>45.500 kg</td><td>€3,37</td>
+              <td><div class="score-wrap"><span class="score-bar"><span class="score-fill" style="width:85%;background:var(--orange)"></span></span>85%</div></td>
               <td>1,4%</td>
-              <td><span class="grade c">C</span></td>
-              <td><span class="grade c">C</span></td>
+              <td><span class="grade c">C</span></td><td><span class="grade c">C</span></td>
               <td><span class="flag risk">✕ Ondermaats</span></td>
             </tr>
             <tr>
               <td class="carrier-name">Mulder Express</td>
-              <td>4</td>
-              <td>38.500 kg</td>
-              <td>€2,61</td>
-              <td>68%</td>
+              <td>4</td><td>38.500 kg</td><td>€2,61</td>
+              <td><div class="score-wrap"><span class="score-bar"><span class="score-fill" style="width:68%;background:var(--red)"></span></span>68%</div></td>
               <td>3,9%</td>
-              <td><span class="grade b">B</span></td>
-              <td><span class="grade d">D</span></td>
+              <td><span class="grade b">B</span></td><td><span class="grade d">D</span></td>
               <td><span class="flag risk">✕ Onbetrouwbaar</span></td>
             </tr>
           </tbody>
@@ -412,17 +384,68 @@ tr:hover td{background:rgba(0,0,0,.01)}
 </div>
 
 <script>
-async function startAnalysis(){
-  document.getElementById('uploadState').style.display='none';
-  document.getElementById('loadingState').style.display='flex';
-  const steps=['38 rijen inlezen...','8 lanes identificeren...','12 carriers vergelijken...','Prijsafwijkingen detecteren...','On-time scores analyseren...','Schadepatronen herkennen...','Volume-concentratie berekenen...','Scorecards genereren...','Aanbevelingen opstellen...'];
-  const stepEl=document.getElementById('loaderStep');
-  for(const s of steps){
-    stepEl.textContent=s;
-    await new Promise(r=>setTimeout(r,400+Math.random()*300));
+const STEPS = [
+  '2.486 rijen inlezen...',
+  '8 lanes identificeren...',
+  '12 carriers vergelijken...',
+  'Prijsafwijkingen detecteren...',
+  'On-time scores analyseren...',
+  'Schadepatronen herkennen...',
+  'Volume-concentratie berekenen...',
+  'Scorecards genereren...',
+  'Aanbevelingen opstellen...'
+];
+
+const UPLOAD_HTML = `
+  <div class="upload-icon">📊</div>
+  <div class="upload-title">Upload je shipment data</div>
+  <div class="upload-sub">Sleep een CSV-bestand hierheen of klik om te selecteren.<br>De AI analyseert je lanes, carriers en volumes automatisch.</div>
+  <button class="upload-btn" onclick="event.stopPropagation();selectFile()">CSV selecteren</button>
+`;
+
+function selectFile() {
+  const zone = document.getElementById('dropZone');
+  zone.classList.add('selected');
+  zone.onclick = null;
+  zone.innerHTML = `
+    <div class="upload-icon">📄</div>
+    <div class="upload-title" style="color:var(--green)">✓ shipment_Q1_2026.csv geselecteerd</div>
+    <div class="upload-sub">847 KB · Analyse wordt gestart...</div>
+  `;
+  setTimeout(() => startAnalysis('shipment_Q1_2026.csv'), 900);
+}
+
+function loadDemo() {
+  startAnalysis('demo_shipments_Q1_2026.csv');
+}
+
+async function startAnalysis(filename) {
+  document.getElementById('uploadState').style.display = 'none';
+  document.getElementById('loadingState').style.display = 'flex';
+  document.getElementById('progressBar').style.width = '0%';
+
+  const stepEl = document.getElementById('loaderStep');
+  const bar = document.getElementById('progressBar');
+
+  for (let i = 0; i < STEPS.length; i++) {
+    stepEl.textContent = STEPS[i];
+    bar.style.width = ((i + 1) / STEPS.length * 100) + '%';
+    await new Promise(r => setTimeout(r, 500 + Math.random() * 400));
   }
-  document.getElementById('loadingState').style.display='none';
-  document.getElementById('dashboardState').style.display='block';
+
+  document.getElementById('dashFilename').textContent = filename;
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('dashboardState').style.display = 'block';
+}
+
+function resetDemo() {
+  document.getElementById('dashboardState').style.display = 'none';
+  const zone = document.getElementById('dropZone');
+  zone.classList.remove('selected');
+  zone.onclick = selectFile;
+  zone.innerHTML = UPLOAD_HTML;
+  document.getElementById('uploadState').style.display = 'flex';
+  window.scrollTo(0, 0);
 }
 </script>
 </body>
