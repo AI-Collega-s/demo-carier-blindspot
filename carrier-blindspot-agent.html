@@ -31,7 +31,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .hdr-dot{width:7px;height:7px;background:var(--orange);border-radius:50%;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-.main{max-width:1200px;margin:0 auto;padding:24px 32px}
+.main{max-width:1200px;margin:0 auto;padding:16px 32px}
 
 /* UPLOAD STATE */
 #uploadState{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:20px}
@@ -103,20 +103,31 @@ tr:hover td{background:rgba(0,0,0,.01)}
 .score-bar{width:60px;height:6px;background:var(--bg);border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:8px}
 .score-fill{height:100%;border-radius:3px}
 .csv-tag{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .main{padding:16px}
+  .stats-row{grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+  .stat-card{padding:14px 16px}
+  .stat-card .stat-num{font-size:22px}
+  .finding{padding:14px 16px}
+  .finding-top{flex-direction:column;gap:6px}
+  .finding-title{font-size:13px}
+  .finding-desc{font-size:12px}
+  .finding-data{gap:6px}
+  .data-chip{font-size:10px;padding:4px 8px}
+  .finding-action{font-size:11px}
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{min-width:640px}
+  th,td{padding:10px 12px;font-size:12px}
+  .upload-zone{padding:40px 24px}
+  .upload-title{font-size:14px}
+  .upload-sub{font-size:12px}
+}
 </style>
 </head>
 <body>
 
-<div class="hdr">
-  <div class="hdr-left">
-    <div class="logo">AI</div>
-    <div><div class="hdr-title">AI Colleague Hub</div><div class="hdr-sub">Carrier Blindspot Agent</div></div>
-  </div>
-  <div class="hdr-right">
-    <span class="csv-tag" id="csvLabel"></span>
-    <div class="hdr-status"><span class="hdr-dot"></span> Agent actief</div>
-  </div>
-</div>
 
 <div class="main">
 
