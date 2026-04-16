@@ -191,7 +191,8 @@ tr:hover td{background:rgba(0,0,0,.015)}
       <div class="upload-icon">📊</div>
       <div class="upload-title">Upload je shipment data</div>
       <div class="upload-sub">Selecteer een CSV-bestand om de analyse te starten.<br>De AI analyseert je lanes, carriers en volumes automatisch.</div>
-      <label for="st" class="upload-btn">CSV selecteren</label>
+      <button class="upload-btn" onclick="document.getElementById('csv-input').click()">CSV selecteren</button>
+      <input type="file" id="csv-input" accept=".csv,.xlsx,.xls" style="display:none">
     </div>
   </div>
 
@@ -215,8 +216,8 @@ tr:hover td{background:rgba(0,0,0,.015)}
   <div id="dashboardState">
 
     <div class="dash-header">
-      <div class="dash-file">📄 <strong>shipment_Q1_2026.csv</strong> &nbsp;·&nbsp; geanalyseerd op 16 apr 2026 &nbsp;·&nbsp; 2.486 rijen verwerkt</div>
-      <label for="st" class="reset-btn">&#8617; Nieuwe analyse</label>
+      <div class="dash-file">📄 <strong id="dash-filename">shipment_Q1_2026.csv</strong> &nbsp;·&nbsp; geanalyseerd op 16 apr 2026 &nbsp;·&nbsp; 2.486 rijen verwerkt</div>
+      <button class="reset-btn" onclick="resetAnalysis()">&#8617; Nieuwe analyse</button>
     </div>
 
     <div class="stats-row">
@@ -413,5 +414,19 @@ tr:hover td{background:rgba(0,0,0,.015)}
   </div><!-- /dashboardState -->
 </div><!-- /main -->
 
+<script>
+document.getElementById('csv-input').addEventListener('change', function(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  document.getElementById('dash-filename').textContent = file.name;
+  document.getElementById('st').checked = true;
+});
+
+function resetAnalysis() {
+  document.getElementById('st').checked = false;
+  document.getElementById('csv-input').value = '';
+  document.getElementById('dash-filename').textContent = 'shipment_Q1_2026.csv';
+}
+</script>
 </body>
 </html>
