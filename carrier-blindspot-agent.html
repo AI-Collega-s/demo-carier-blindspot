@@ -131,12 +131,13 @@ tr:hover td{background:rgba(0,0,0,.015)}
 
   <!-- UPLOAD STATE -->
   <div id="uploadState">
-    <div class="upload-zone" id="dropZone" onclick="selectFile()">
+    <div class="upload-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
       <div class="upload-icon">📊</div>
       <div class="upload-title">Upload je shipment data</div>
       <div class="upload-sub">Sleep een CSV-bestand hierheen of klik om te selecteren.<br>De AI analyseert je lanes, carriers en volumes automatisch.</div>
-      <button class="upload-btn" onclick="event.stopPropagation();selectFile()">CSV selecteren</button>
+      <button class="upload-btn" onclick="event.stopPropagation();document.getElementById('fileInput').click()">CSV selecteren</button>
     </div>
+    <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" style="display:none" onchange="onFileSelected(this)">
     <div class="demo-note">Geen CSV bij de hand? <span class="demo-link" onclick="loadDemo()">Gebruik voorbeelddata</span></div>
   </div>
 
@@ -203,7 +204,7 @@ tr:hover td{background:rgba(0,0,0,.015)}
             <div class="finding-title">Mulder Express presteert structureel onder de maat</div>
             <span class="finding-badge high">Hoog risico</span>
           </div>
-          <div class="finding-desc">Mulder Express scoort op alle 4 lanes ver onder het gemiddelde: 64–71% on-time (benchmark: 90%+) en 3,5–4,2% schadepercentage (benchmark: &lt;1%). Dit patroon is consistent over het hele kwartaal.</div>
+          <div class="finding-desc">Mulder Express scoort op alle 4 lanes ver onder het gemiddelde: 64-71% on-time (benchmark: 90%+) en 3,5-4,2% schadepercentage (benchmark: &lt;1%). Dit patroon is consistent over het hele kwartaal.</div>
           <div class="finding-data">
             <span class="data-chip">Venlo→Düss: 64% on-time · 4,2% schade</span>
             <span class="data-chip">A'dam→Hamburg: 67% · 3,8%</span>
@@ -232,7 +233,7 @@ tr:hover td{background:rgba(0,0,0,.015)}
             <div class="finding-title">Hendriks Forwarding consistent duurder zonder meerwaarde</div>
             <span class="finding-badge medium">Medium risico</span>
           </div>
-          <div class="finding-desc">Hendriks Forwarding is actief op 6 lanes en scoort overal 10–20% boven de goedkoopste concurrent, met lagere on-time percentages (80–88%) en hogere schadepercentages (1,0–2,1%). Geen enkele lane waar ze de beste optie zijn.</div>
+          <div class="finding-desc">Hendriks Forwarding is actief op 6 lanes en scoort overal 10-20% boven de goedkoopste concurrent, met lagere on-time percentages (80-88%) en hogere schadepercentages (1,0-2,1%). Geen enkele lane waar ze de beste optie zijn.</div>
           <div class="finding-data">
             <span class="data-chip">6 lanes actief</span>
             <span class="data-chip">Gem. 15% duurder</span>
@@ -244,17 +245,17 @@ tr:hover td{background:rgba(0,0,0,.015)}
 
         <div class="finding sev-low">
           <div class="finding-top">
-            <div class="finding-title">Visser Logistics onderbenut — beste prijs-prestatie</div>
+            <div class="finding-title">Visser Logistics onderbenut, beste prijs-prestatie</div>
             <span class="finding-badge low">Kans</span>
           </div>
-          <div class="finding-desc">Visser Logistics scoort op 6 lanes de laagste prijs én de hoogste betrouwbaarheid (95–97% on-time, 0,2–0,3% schade), maar krijgt overal het minste volume. Hier ligt een directe optimalisatiekans.</div>
+          <div class="finding-desc">Visser Logistics scoort op 6 lanes de laagste prijs én de hoogste betrouwbaarheid (95-97% on-time, 0,2-0,3% schade), maar krijgt overal het minste volume. Hier ligt een directe optimalisatiekans.</div>
           <div class="finding-data">
             <span class="data-chip">6 lanes · overal goedkoopst</span>
             <span class="data-chip">Gem. 96% on-time</span>
             <span class="data-chip">Gem. 0,2% schade</span>
             <span class="data-chip">Slechts 3,5% van totaal volume</span>
           </div>
-          <div class="finding-action">💡 Capaciteitsgesprek met Visser Logistics starten. Bij opschaling naar 15–20% van volume potentieel €47k/jaar besparing.</div>
+          <div class="finding-action">💡 Capaciteitsgesprek met Visser Logistics starten. Bij opschaling naar 15-20% van volume potentieel €47k/jaar besparing.</div>
         </div>
 
       </div>
@@ -400,23 +401,31 @@ const UPLOAD_HTML = `
   <div class="upload-icon">📊</div>
   <div class="upload-title">Upload je shipment data</div>
   <div class="upload-sub">Sleep een CSV-bestand hierheen of klik om te selecteren.<br>De AI analyseert je lanes, carriers en volumes automatisch.</div>
-  <button class="upload-btn" onclick="event.stopPropagation();selectFile()">CSV selecteren</button>
+  <button class="upload-btn" onclick="event.stopPropagation();document.getElementById('fileInput').click()">CSV selecteren</button>
 `;
 
-function selectFile() {
+function onFileSelected(input) {
+  if (!input.files.length) return;
+  const file = input.files[0];
+  const sizekb = Math.round(file.size / 1024);
+  const sizeLabel = sizekb > 1024 ? (sizekb / 1024).toFixed(1) + ' MB' : sizekb + ' KB';
+  showFileSelected(file.name, sizeLabel);
+}
+
+function showFileSelected(filename, sizeLabel) {
   const zone = document.getElementById('dropZone');
   zone.classList.add('selected');
   zone.onclick = null;
   zone.innerHTML = `
     <div class="upload-icon">📄</div>
-    <div class="upload-title" style="color:var(--green)">✓ shipment_Q1_2026.csv geselecteerd</div>
-    <div class="upload-sub">847 KB · Analyse wordt gestart...</div>
+    <div class="upload-title" style="color:var(--green)">&#10003; ${filename} geselecteerd</div>
+    <div class="upload-sub">${sizeLabel} &middot; Analyse wordt gestart...</div>
   `;
-  setTimeout(() => startAnalysis('shipment_Q1_2026.csv'), 900);
+  setTimeout(() => startAnalysis(filename), 900);
 }
 
 function loadDemo() {
-  startAnalysis('demo_shipments_Q1_2026.csv');
+  showFileSelected('shipment_Q1_2026.csv', '847 KB');
 }
 
 async function startAnalysis(filename) {
