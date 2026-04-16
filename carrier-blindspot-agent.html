@@ -159,15 +159,33 @@ tr:hover td{background:rgba(0,0,0,.015)}
 
 /* APPLY BUTTON + APPLIED STATE */
 .finding-bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:14px}
-.apply-btn{padding:9px 20px;background:var(--orange);color:#fff;border:none;border-radius:var(--rs);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s,transform .1s;white-space:nowrap;flex-shrink:0}
-.apply-btn:hover:not(:disabled){background:var(--orange-dark);transform:translateY(-1px)}
+.apply-btn{padding:9px 20px;background:var(--orange);color:#fff;border:none;border-radius:var(--rs);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;white-space:nowrap;flex-shrink:0;display:inline-flex;align-items:center;gap:7px;min-width:140px;justify-content:center}
+.apply-btn:hover:not(:disabled){background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(230,126,34,.35)}
 .apply-btn:active:not(:disabled){transform:translateY(0)}
 .apply-btn:disabled{cursor:default}
-.apply-confirm{font-size:11px;color:var(--green);font-weight:500;margin-top:8px;opacity:0;max-height:0;overflow:hidden;transition:opacity .4s,max-height .4s}
-.finding.applied{border-color:var(--green) !important;transition:border-color .4s,background .4s}
+
+/* Spinner inside button */
+.btn-spin{width:11px;height:11px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .65s linear infinite;flex-shrink:0}
+
+/* Card processing state */
+@keyframes border-pulse{
+  0%,100%{box-shadow:var(--shadow)}
+  50%{box-shadow:0 0 0 3px rgba(230,126,34,.25),var(--shadow-lg)}
+}
+.finding.processing{animation:border-pulse 1.1s ease-in-out infinite;border-color:var(--orange) !important}
+.finding.processing::before{background:var(--orange) !important}
+
+/* Card applied state */
+@keyframes card-confirm{
+  0%{transform:scale(1)}
+  40%{transform:scale(1.007)}
+  100%{transform:scale(1)}
+}
+.finding.applied{border-color:var(--green) !important;animation:card-confirm .45s ease}
 .finding.applied::before{background:var(--green) !important}
-.finding.applied .finding-action{background:var(--green-light);border-radius:var(--rs)}
+.finding.applied .finding-action{background:var(--green-light);border-radius:var(--rs);transition:background .4s}
 .finding.applied .apply-btn{background:var(--green)}
+.apply-confirm{font-size:11px;color:var(--green);font-weight:500;margin-top:10px;opacity:0;max-height:0;overflow:hidden;transition:opacity .5s .1s,max-height .4s}
 .finding.applied .apply-confirm{opacity:1;max-height:40px}
 
 /* RESPONSIVE */
@@ -470,16 +488,29 @@ function resetAnalysis() {
 
 function applyFinding(btn) {
   var card = btn.closest('.finding');
-  if (card.classList.contains('applied')) return;
-  btn.textContent = 'Verwerken...';
+  if (card.classList.contains('applied') || card.classList.contains('processing')) return;
+
   btn.disabled = true;
+  card.classList.add('processing');
+
+  var steps = [
+    { html: '<span class="btn-spin"></span>Verbinding maken...', t: 0 },
+    { html: '<span class="btn-spin"></span>Wijziging doorvoeren...', t: 950 },
+    { html: '<span class="btn-spin"></span>Bevestiging ontvangen...', t: 2000 },
+  ];
+
+  steps.forEach(function(s) {
+    setTimeout(function() { btn.innerHTML = s.html; }, s.t);
+  });
+
   setTimeout(function() {
+    card.classList.remove('processing');
     card.classList.add('applied');
-    btn.textContent = '\u2713 Toegepast';
+    btn.innerHTML = '\u2713 Toegepast';
     var now = new Date();
     var t = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
-    card.querySelector('.apply-confirm').textContent = '\u2713 Aanbeveling doorgezet om ' + t + ' \u2014 verwerkt in volgende analyse run';
-  }, 900);
+    card.querySelector('.apply-confirm').textContent = '\u2713 Verwerkt in transportsysteem \u00b7 ' + t;
+  }, 3100);
 }
 </script>
 </body>
