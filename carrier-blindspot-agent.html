@@ -157,6 +157,19 @@ tr:hover td{background:rgba(0,0,0,.015)}
 .score-bar{width:48px;height:5px;background:var(--bg);border-radius:3px;overflow:hidden;flex-shrink:0}
 .score-fill{height:100%;border-radius:3px;display:block}
 
+/* APPLY BUTTON + APPLIED STATE */
+.finding-bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:14px}
+.apply-btn{padding:9px 20px;background:var(--orange);color:#fff;border:none;border-radius:var(--rs);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s,transform .1s;white-space:nowrap;flex-shrink:0}
+.apply-btn:hover:not(:disabled){background:var(--orange-dark);transform:translateY(-1px)}
+.apply-btn:active:not(:disabled){transform:translateY(0)}
+.apply-btn:disabled{cursor:default}
+.apply-confirm{font-size:11px;color:var(--green);font-weight:500;margin-top:8px;opacity:0;max-height:0;overflow:hidden;transition:opacity .4s,max-height .4s}
+.finding.applied{border-color:var(--green) !important;transition:border-color .4s,background .4s}
+.finding.applied::before{background:var(--green) !important}
+.finding.applied .finding-action{background:var(--green-light);border-radius:var(--rs)}
+.finding.applied .apply-btn{background:var(--green)}
+.finding.applied .apply-confirm{opacity:1;max-height:40px}
+
 /* RESPONSIVE */
 @media(max-width:768px){
   .main{padding:16px}
@@ -258,7 +271,11 @@ tr:hover td{background:rgba(0,0,0,.015)}
             <span class="data-chip">Dekker: €2,10/kg · 93% on-time</span>
             <span class="data-chip">Verschil: +€29.450/jaar</span>
           </div>
-          <div class="finding-action">💡 Volume van Wolters Cargo verschuiven naar Dekker Transport of Visser Logistics op deze lane.</div>
+          <div class="finding-bottom">
+            <div class="finding-action">💡 Volume van Wolters Cargo verschuiven naar Dekker Transport of Visser Logistics op deze lane.</div>
+            <button class="apply-btn" onclick="applyFinding(this)">Toepassen →</button>
+          </div>
+          <div class="apply-confirm"></div>
         </div>
 
         <div class="finding sev-high">
@@ -273,7 +290,11 @@ tr:hover td{background:rgba(0,0,0,.015)}
             <span class="data-chip">Moerdijk naar Gent: 69% · 3,9%</span>
             <span class="data-chip">Tilburg naar Paris: 71% · 3,5%</span>
           </div>
-          <div class="finding-action">💡 Contract met Mulder Express herzien. Volume herverdelen over Bakker Distributie en Visser Logistics.</div>
+          <div class="finding-bottom">
+            <div class="finding-action">💡 Contract met Mulder Express herzien. Volume herverdelen over Bakker Distributie en Visser Logistics.</div>
+            <button class="apply-btn" onclick="applyFinding(this)">Toepassen →</button>
+          </div>
+          <div class="apply-confirm"></div>
         </div>
 
         <div class="finding sev-medium">
@@ -287,7 +308,11 @@ tr:hover td{background:rgba(0,0,0,.015)}
             <span class="data-chip">Bakker: 18.000 kg (16%)</span>
             <span class="data-chip">Overig: 10.500 kg (10%)</span>
           </div>
-          <div class="finding-action">💡 Spreid volume naar minimaal 60/40 verdeling. Visser Logistics kan opschalen op deze lane (nu 4.500 kg, beste prijs en score).</div>
+          <div class="finding-bottom">
+            <div class="finding-action">💡 Spreid volume naar minimaal 60/40 verdeling. Visser Logistics kan opschalen op deze lane (nu 4.500 kg, beste prijs en score).</div>
+            <button class="apply-btn" onclick="applyFinding(this)">Toepassen →</button>
+          </div>
+          <div class="apply-confirm"></div>
         </div>
 
         <div class="finding sev-medium">
@@ -302,7 +327,11 @@ tr:hover td{background:rgba(0,0,0,.015)}
             <span class="data-chip">Gem. 85% on-time</span>
             <span class="data-chip">Gem. 1,4% schade</span>
           </div>
-          <div class="finding-action">💡 Heronderhandelen met Hendriks of volume afbouwen. Op elke lane is een beter alternatief beschikbaar.</div>
+          <div class="finding-bottom">
+            <div class="finding-action">💡 Heronderhandelen met Hendriks of volume afbouwen. Op elke lane is een beter alternatief beschikbaar.</div>
+            <button class="apply-btn" onclick="applyFinding(this)">Toepassen →</button>
+          </div>
+          <div class="apply-confirm"></div>
         </div>
 
         <div class="finding sev-low">
@@ -317,7 +346,11 @@ tr:hover td{background:rgba(0,0,0,.015)}
             <span class="data-chip">Gem. 0,2% schade</span>
             <span class="data-chip">Slechts 3,5% van totaal volume</span>
           </div>
-          <div class="finding-action">💡 Capaciteitsgesprek met Visser Logistics starten. Bij opschaling naar 15-20% van volume potentieel €47k/jaar besparing.</div>
+          <div class="finding-bottom">
+            <div class="finding-action">💡 Capaciteitsgesprek met Visser Logistics starten. Bij opschaling naar 15-20% van volume potentieel €47k/jaar besparing.</div>
+            <button class="apply-btn" onclick="applyFinding(this)">Toepassen →</button>
+          </div>
+          <div class="apply-confirm"></div>
         </div>
 
       </div>
@@ -426,6 +459,27 @@ function resetAnalysis() {
   document.getElementById('st').checked = false;
   document.getElementById('csv-input').value = '';
   document.getElementById('dash-filename').textContent = 'shipment_Q1_2026.csv';
+  document.querySelectorAll('.finding.applied').forEach(function(card) {
+    card.classList.remove('applied');
+    var btn = card.querySelector('.apply-btn');
+    btn.textContent = 'Toepassen \u2192';
+    btn.disabled = false;
+    card.querySelector('.apply-confirm').textContent = '';
+  });
+}
+
+function applyFinding(btn) {
+  var card = btn.closest('.finding');
+  if (card.classList.contains('applied')) return;
+  btn.textContent = 'Verwerken...';
+  btn.disabled = true;
+  setTimeout(function() {
+    card.classList.add('applied');
+    btn.textContent = '\u2713 Toegepast';
+    var now = new Date();
+    var t = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+    card.querySelector('.apply-confirm').textContent = '\u2713 Aanbeveling doorgezet om ' + t + ' \u2014 verwerkt in volgende analyse run';
+  }, 900);
 }
 </script>
 </body>
